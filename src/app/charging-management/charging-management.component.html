@@ -3,27 +3,37 @@
   <div>
     <div>
       <mat-form-field>
-        <mat-label>Select station</mat-label>
-        <mat-select [(value)]="selectedStation">
+        <mat-label>Select car to Charge</mat-label>
+        <mat-select [(value)]="selectedCar">
           <mat-option>None</mat-option>
-          <mat-option value="station1">Station 1</mat-option>
-          <mat-option value="station2">Station 2</mat-option>
-          <mat-option value="station3">Station 3</mat-option>
-          <mat-option value="station4">Station 4</mat-option>
-          <mat-option value="station5">Station 5</mat-option>
+          <mat-option *ngFor="let car of cars"
+          [value]="car.carId">{{car.carName}}</mat-option>
         </mat-select>
       </mat-form-field>
     </div>
     <div>
-
+      <mat-form-field>
+        <mat-label>Select station</mat-label>
+        <mat-select [(value)]="selectedStation" (selectionChange)="checkAvailablePorts(selectedStation)">
+          <mat-option>None</mat-option>
+          <mat-option value="1">Station 1</mat-option>
+          <mat-option value="2">Station 2</mat-option>
+          <mat-option value="3">Station 3</mat-option>
+          <mat-option value="4">Station 4</mat-option>
+          <mat-option value="5">Station 5</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-error *ngIf="isPort1Disabled && isPort2Disabled">Both ports are occupied</mat-error>
+    </div>
+    <div>
       <mat-form-field>
         <mat-label>Port 1 - Select watt</mat-label>
-        <mat-select [(value)]="selectedWattPort1">
+        <mat-select [(value)]="selectedWattPort1" (selectionChange)="changeWatts($event, selectedStation, 1)" [disabled]="disableAllStationAndPorts || isPort1Disabled">
           <mat-option>None</mat-option>
-          <mat-option value="station1">3.6 KWh</mat-option>
-          <mat-option value="station2">7.2 KWh</mat-option>
-          <mat-option value="station3">11 KWh</mat-option>
-          <mat-option value="station4">22 KWh</mat-option>
+          <mat-option value="3.6">3.6 KWh</mat-option>
+          <mat-option value="7.2">7.2 KWh</mat-option>
+          <mat-option value="11">11 KWh</mat-option>
+          <mat-option value="22" [disabled]="isPort2Disabled">22 KWh</mat-option>
         </mat-select>
       </mat-form-field>
 
@@ -31,17 +41,17 @@
     <div>
       <mat-form-field>
         <mat-label>Port 2 - Select watt</mat-label>
-        <mat-select [(value)]="selectedWattPort2">
+        <mat-select [(value)]="selectedWattPort2" (selectionChange)="changeWatts($event, selectedStation, 2)" [disabled]="disableAllStationAndPorts || isPort2Disabled">
           <mat-option>None</mat-option>
-          <mat-option value="station1">3.6 KWh</mat-option>
-          <mat-option value="station2">7.2 KWh</mat-option>
-          <mat-option value="station3">11 KWh</mat-option>
-          <mat-option value="station4">22 KWh</mat-option>
+          <mat-option value="3.6">3.6 KWh</mat-option>
+          <mat-option value="7.2">7.2 KWh</mat-option>
+          <mat-option value="11">11 KWh</mat-option>
+          <mat-option value="22" [disabled]="isPort1Disabled">22 KWh</mat-option>
         </mat-select>
       </mat-form-field>
     </div>
     <div>
-      <button mat-flat-button color="primary" (click)="startCharging(1,{},1)">Start Charging</button>
+      <button mat-flat-button color="primary" (click)="startCharging(selectedCar, selectedStation, selectedWattPort1,selectedWattPort2)">Start Charging</button>
       <button mat-flat-button color="warn" (click)="stopCharging(1)">Stop Charging</button>
     </div>
   </div>
@@ -54,19 +64,7 @@
       </mat-panel-description>
     </mat-expansion-panel-header>
     <div>
-      <app-simple-mat-table></app-simple-mat-table>
-    </div>
-  </mat-expansion-panel>
-</ng-container>
-<ng-container>
-  <mat-expansion-panel>
-    <mat-expansion-panel-header>
-      <mat-panel-description>
-        Available Station and Ports
-      </mat-panel-description>
-    </mat-expansion-panel-header>
-    <div>
-      <app-simple-mat-table></app-simple-mat-table>
+      <app-simple-mat-table [inputData]=chargingStationData></app-simple-mat-table>
     </div>
   </mat-expansion-panel>
 </ng-container>

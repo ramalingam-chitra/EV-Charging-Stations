@@ -7,6 +7,8 @@ import { Station } from '../model/charging-model';
   styleUrls: ['./charging-management.component.scss'],
 })
 export class ChargingManagementComponent implements OnInit {
+  isPort2Disabled: boolean = false;
+  isPort1Disabled: boolean = false;
 
   constructor() {}
 
@@ -15,58 +17,89 @@ export class ChargingManagementComponent implements OnInit {
   selectedStation: any;
   selectedWattPort1: any;
   selectedWattPort2: any;
+  selectedCar: any;
   showChargingStationData: boolean = false;
 
   chargingStationData: Station[] = [
     {
-      stationId: 0,
-      stationName: 'Station1',
-      isPort1Available: false,
-      selectedWattsForPort1Value: 3.2,
-      isPort1Disabled: false,
-      isPort2Available: false,
-      selectedWattsForPort2Value: 3.2,
-      isPort2Disabled: false,
-    },
-    {
       stationId: 1,
-      stationName: 'Station2',
+      stationName: 'Station 1',
       isPort1Available: false,
-      selectedWattsForPort1Value: 3.2,
+      selectedWattsForPort1Value: 0,
       isPort1Disabled: false,
       isPort2Available: false,
       selectedWattsForPort2Value: 3.2,
       isPort2Disabled: false,
+      port1CarName: '',
+      port1PersonName: '',
+      port1Availablility: 'Not Available',
+      port2CarName: '',
+      port2PersonName: '',
+      port2Availablility: 'Not Available'
     },
     {
       stationId: 2,
-      stationName: 'Station3',
-      isPort1Available: true,
+      stationName: 'Station 2',
+      isPort1Available: false,
       selectedWattsForPort1Value: 3.2,
       isPort1Disabled: false,
-      isPort2Available: true,
+      isPort2Available: false,
       selectedWattsForPort2Value: 3.2,
       isPort2Disabled: false,
+      port1CarName: '',
+      port1PersonName: '',
+      port1Availablility: 'Not Available',
+      port2CarName: '',
+      port2PersonName: '',
+      port2Availablility: 'Not Available'
     },
     {
       stationId: 3,
-      stationName: 'Station4',
-      isPort1Available: true,
+      stationName: 'Station 3',
+      isPort1Available: false,
       selectedWattsForPort1Value: 3.2,
-      isPort1Disabled: false,
+      isPort1Disabled: true,
       isPort2Available: true,
       selectedWattsForPort2Value: 3.2,
       isPort2Disabled: false,
+      port1CarName: '',
+      port1PersonName: '',
+      port1Availablility: 'Not Available',
+      port2CarName: '',
+      port2PersonName: '',
+      port2Availablility: 'Available'
     },
     {
       stationId: 4,
-      stationName: 'Station5',
+      stationName: 'Station 4',
       isPort1Available: true,
       selectedWattsForPort1Value: 3.2,
       isPort1Disabled: false,
       isPort2Available: true,
       selectedWattsForPort2Value: 3.2,
       isPort2Disabled: false,
+      port1CarName: '',
+      port1PersonName: '',
+      port1Availablility: 'Available',
+      port2CarName: '',
+      port2PersonName: '',
+      port2Availablility: 'Available'
+    },
+    {
+      stationId: 5,
+      stationName: 'Station 5',
+      isPort1Available: true,
+      selectedWattsForPort1Value: 3.2,
+      isPort1Disabled: false,
+      isPort2Available: true,
+      selectedWattsForPort2Value: 3.2,
+      isPort2Disabled: false,
+      port1CarName: '',
+      port1PersonName: '',
+      port1Availablility: 'Available',
+      port2CarName: '',
+      port2PersonName: '',
+      port2Availablility: 'Available'
     },
   ];
 
@@ -216,7 +249,12 @@ export class ChargingManagementComponent implements OnInit {
   ngDoCheck() {}
   changeWatts(event: any, station: any, port: number) {
     debugger;
-    if (event.target.value == "22") {
+    if(port == 1) {
+      this.isPort2Disabled = true;
+    } else {
+      this.isPort1Disabled = true;
+    }
+    if (event.value == "22") {
       if(port == 1) {
         this.chargingStationData[station].isPort2Disabled = true;
       } else {
@@ -230,48 +268,68 @@ export class ChargingManagementComponent implements OnInit {
     //this.selected = event.target.value;
   }
 
-  changeStation(event: any, chargingStation: any) {
+  changeStation(event: any) {
     //check port status and enable or disable watts and ports
+    this.chargingStationData[event.value].isPort1Available = true;
     console.log("Selected station: ", event)
-    console.log("station: ", chargingStation)
   }
 
-  checkAvailableChargingStations() {
-    this.showChargingStationData = true;
+  checkAvailablePorts(stationId: any) {
     for(const station of this.chargingStationData) {
-      if(station.isPort1Available){
-        window.alert("Port 1 in " + station.stationId + " is open for charging")
-        return station;
-      } else if(station.isPort2Available) {
-        window.alert("Port 2 in " + station.stationId + " is open for charging")
-        return station;
+      if(stationId === station.stationId.toString()){
+        if(station.isPort1Available && station.isPort2Available){
+          this.isPort1Disabled = false;
+          this.isPort2Disabled = false;
+        }else if(station.isPort1Available){
+          this.isPort1Disabled = false;
+        } else if(station.isPort2Available) {
+          this.isPort2Disabled = false;
+        } else {
+          this.isPort1Disabled = true;
+          this.isPort2Disabled = true;
+        }
       }
     }
-    return;
   }
 
   disableAllPorts() {
     this.disableAllStationAndPorts = true;
   }
 
-  sendAlertToPerson( carId: number, isCharged?: boolean, isStationClosed?: boolean) {
-
+  sendAlertToPerson( carId: number, message: string) {
+    window.alert(carId + message)
   }
 
-  startCharging(carId: number, station : any, selectedPort: number, ) {
-    if(selectedPort === 1) {
-      station.isPort1Available = false;
-    } else if(selectedPort === 1) {
-      station.isPort2Available = false;
+  startCharging(selectedCar: any, selectedStation: any, selectedWattPort1: any,selectedWattPort2: any ) {
+    if(selectedWattPort1 == undefined && selectedWattPort2 == undefined){
+      window.alert("Please select a Port to start charging");
+      return;
     }
-    console.log ("so and so car has started charging");
-    return station;
+    this.chargingStationData.map((data) => {
+      if(data.stationId.toString() === selectedStation){
+        if(selectedWattPort1) {
+          data.isPort1Available = false;
+          data.port1Availablility = "Not available";
+          data.port1CarName = this.getCarDetailsById(selectedCar).carName;
+          data.port1PersonName = this.getCarDetailsById(selectedCar).personName;
+          data.isPort2Disabled = this.isPort2Disabled = true;
+        } else if(selectedWattPort2) {
+          data.isPort2Available = false;
+          data.port2Availablility = "Not available";
+          data.port2CarName = this.getCarDetailsById(selectedCar).carName;
+          data.port2PersonName = this.getCarDetailsById(selectedCar).personName;
+          data.isPort1Disabled  = this.isPort2Disabled =  true;
+        }
+        this.sendAlertToPerson(selectedCar, "charging is in progress" );
+      }
+      console.log("car id : ", selectedCar +"charging is in progress");
+    });
   }
 
-  stopCharging(carId?: number) {
+  stopCharging(carId: number) {
     console.log ("so and so car has started charging");
    // chekcar status and send alert.
-    this.sendAlertToPerson(1);
+    this.sendAlertToPerson(carId, 'Charging station will be closed at 5PM');
   }
 
   enableAllPorts() {
@@ -281,11 +339,14 @@ export class ChargingManagementComponent implements OnInit {
     }
   }
 
-  showCarsInQueue () {
-
-  }
-
   showChargingStatus () {
     console.log("Car A is 65% charged.");
+  }
+
+  getCarDetailsById (carId: number) { 
+    let details = {carName:'', personName: ''};
+    details.carName = this.cars.find((p) => p.carId === carId)?.carName || '';
+    details.personName = this.cars.find((p) => p.carId === carId)?.personName || '';
+    return details;
   }
 }

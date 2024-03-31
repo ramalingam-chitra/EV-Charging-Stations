@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { Station } from '../model/charging-model';
 
@@ -11,58 +11,8 @@ export class SimpleMatTableComponent implements OnInit {
   
   displayedColumns: Array<any> | undefined;
   displayedColumnsKeys: string[] | undefined;
-  StationData: Station[] = [
-    {
-      stationId: 0,
-      stationName: 'Station 1',
-      isPort1Available: false,
-      selectedWattsForPort1Value: 3.2,
-      isPort1Disabled: false,
-      isPort2Available: false,
-      selectedWattsForPort2Value: 3.2,
-      isPort2Disabled: false,
-    },
-    {
-      stationId: 1,
-      stationName: 'Station 2',
-      isPort1Available: false,
-      selectedWattsForPort1Value: 3.2,
-      isPort1Disabled: false,
-      isPort2Available: false,
-      selectedWattsForPort2Value: 3.2,
-      isPort2Disabled: false,
-    },
-    {
-      stationId: 2,
-      stationName: 'Station 3',
-      isPort1Available: true,
-      selectedWattsForPort1Value: 3.2,
-      isPort1Disabled: false,
-      isPort2Available: true,
-      selectedWattsForPort2Value: 3.2,
-      isPort2Disabled: false,
-    },
-    {
-      stationId: 3,
-      stationName: 'Station 4',
-      isPort1Available: true,
-      selectedWattsForPort1Value: 3.2,
-      isPort1Disabled: false,
-      isPort2Available: true,
-      selectedWattsForPort2Value: 3.2,
-      isPort2Disabled: false,
-    },
-    {
-      stationId: 4,
-      stationName: 'Station 5',
-      isPort1Available: true,
-      selectedWattsForPort1Value: 3.2,
-      isPort1Disabled: false,
-      isPort2Available: true,
-      selectedWattsForPort2Value: 3.2,
-      isPort2Disabled: false,
-    },
-  ];
+  @Input()
+  inputData!: Station[];
   dataSource!: MatTableDataSource<Station>;
 
   constructor() {}
@@ -70,23 +20,39 @@ export class SimpleMatTableComponent implements OnInit {
   ngAfterViewInit() {}
 
   ngOnInit(): void {
+    console.log(" dataSource ", this.inputData)
     this.displayedColumns= [
       {
         key: 'stationName',
         header: 'Station Name'
       },
       {
-        key: 'isPort1Available',
-        header: 'Port 1'
+        key: 'port1Availablility',
+        header: 'Port 1 Availability'
       },
       {
-        key: 'isPort2Available',
-        header: 'Port 2'
-      }
+        key: 'port1CarName',
+        header: 'Car in Port 1'
+      },
+      {
+        key: 'port1PersonName',
+        header: 'Person in charge - Port 1'
+      },
+      {
+        key: 'port2Availablility',
+        header: 'Port 2 Availability'
+      },
+      {
+        key: 'port2CarName',
+        header: 'Car in Port 2'
+      },
+      {
+        key: 'port2PersonName',
+        header: 'Person in charge - Port 2'
+      },
     ];
 
     this.displayedColumnsKeys = this.displayedColumns.map(col => col.key);
-    this.dataSource = new MatTableDataSource(this.StationData);
-
+    this.dataSource = new MatTableDataSource(this.inputData);
   }
 }

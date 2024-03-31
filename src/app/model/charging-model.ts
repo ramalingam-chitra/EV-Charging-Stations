@@ -1,19 +1,3 @@
-export interface Employee {
-  id : number,	
-  firstname:string,	
-  lastname:string,	
-  email:string,
-  gender:string,	
-  jobtitle:string,
-  department:string,
-  project: Project
-}
-
-export interface Project{
-  name:string,
-  id:number
-}
-
 export interface Station {
   stationId: number;
   stationName: string;
@@ -23,5 +7,16 @@ export interface Station {
   isPort2Available: boolean;
   selectedWattsForPort2Value: number;
   isPort2Disabled: boolean;
+  port1CarName: string;
+  port1PersonName: string;
+  port1Availablility: string;
+  port2CarName: string;
+  port2PersonName: string;
+  port2Availablility: string;
 }
 
+export interface PortDetails {
+  carId: number,
+  personId: number,
+  portAvailablility: string
+}
