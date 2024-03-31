@@ -1,0 +1,10 @@
+<table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+  <ng-container *ngFor="let dispCol of displayedColumns; let colIndex = index" matColumnDef="{{dispCol.key}}">
+    <th mat-header-cell *matHeaderCellDef>{{dispCol.header}}</th>
+    <td mat-cell *matCellDef="let element">{{element[dispCol.key]}}</td>
+</ng-container>
+
+
+<tr mat-header-row *matHeaderRowDef="displayedColumnsKeys; sticky: true"></tr>
+<tr mat-row *matRowDef="let row; columns: displayedColumnsKeys"></tr>
+</table>
