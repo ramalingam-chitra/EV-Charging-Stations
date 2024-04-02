@@ -153,7 +153,7 @@ export class ChargingManagementComponent implements OnInit {
     },
     {
       carId: 2,
-      availableCharge: 0,
+      availableCharge: 50,
       carName: 'TES2',
       personName: 'PERS2',
       chargingStatus: 'In Progress'
@@ -167,14 +167,14 @@ export class ChargingManagementComponent implements OnInit {
     },
     {
       carId: 4,
-      availableCharge: 0,
+      availableCharge: 70,
       carName: 'TES4',
       personName: 'PERS4',
       chargingStatus: 'In Progress'
     },
     {
       carId: 5,
-      availableCharge: 0,
+      availableCharge: 60,
       carName: 'TES5',
       personName: 'PERS5',
       chargingStatus: 'In Progress'
@@ -188,35 +188,35 @@ export class ChargingManagementComponent implements OnInit {
     },
     {
       carId: 7,
-      availableCharge: 0,
+      availableCharge: 30,
       carName: 'TES7',
       personName: 'PERS7',
       chargingStatus: 'In Queue'
     },
     {
       carId: 8,
-      availableCharge: 0,
+      availableCharge: 10,
       carName: 'TES8',
       personName: 'PERS8',
       chargingStatus: 'In Queue'
     },
     {
       carId: 9,
-      availableCharge: 0,
+      availableCharge: 10,
       carName: 'TES9',
       personName: 'PERS9',
       chargingStatus: 'In Queue'
     },
     {
       carId: 10,
-      availableCharge: 0,
+      availableCharge: 80,
       carName: 'TES10',
       personName: 'PERS10',
       chargingStatus: 'In Queue'
     },
     {
       carId: 11,
-      availableCharge: 0,
+      availableCharge: 30,
       carName: 'TES11',
       personName: 'PERS11',
       chargingStatus: 'In Queue'
@@ -313,8 +313,8 @@ export class ChargingManagementComponent implements OnInit {
     this.disableAllStationAndPorts = true;
   }
 
-  sendAlertToPerson(carId: any, message: string) {
-    window.alert(carId + message)
+  sendAlertToPerson(personId: any, carId: any, message: string) {
+    window.alert('Dear ' +personId +", " +carId + message)
   }
 
   startCharging(selectedCar: any, selectedStationId: any, selectedWattPort1: any, selectedWattPort2: any) {
@@ -331,17 +331,22 @@ export class ChargingManagementComponent implements OnInit {
       selectedStation.port1CarName = car?.carName || '';
       selectedStation.port1PersonName = car?.personName || '';
       selectedStation.isPort2Disabled = this.isPort2Disabled = true;
+      this.calHoursOfCharging(car?.personName, car?.carName, car?.availableCharge, selectedWattPort1);
     } else if (selectedWattPort2 && selectedStation) {
       selectedStation.isPort2Available = false;
       selectedStation.port2Availablility = "Not available";
       selectedStation.port2CarName = car?.carName || '';
       selectedStation.port2PersonName = car?.personName || '';
       selectedStation.isPort1Disabled = this.isPort2Disabled = true;
+      this.calHoursOfCharging(car?.personName,car?.carName, car?.availableCharge, selectedWattPort2);
     }
-    this.sendAlertToPerson(selectedCar, "charging is in progress");
     this.carsInUse.push(this.getCarDetailsById(selectedCar));
     this.cars = this.cars.filter(car => car.carId != selectedCar);
     console.log("car id : ", selectedCar + "charging is in progress");
+  }
+  calHoursOfCharging(person: any,selectedCar: any, availableCharge: number | undefined, selectedWattPort: any) {
+    let remaininghrs = (80 - (availableCharge? availableCharge :0))/selectedWattPort;
+    this.sendAlertToPerson(person, selectedCar, " charging is in progress. Remaining hours : " + Math.round(remaininghrs));
   }
 
   enableAllPorts() {
@@ -374,15 +379,15 @@ export class ChargingManagementComponent implements OnInit {
       if (carDetail?.carName === data.port1CarName) { //modal popup
         data.isPort1Available = true;
         data.port1Availablility = "Available";
+        this.sendAlertToPerson(data.port1PersonName, carDetail.carName, ' charging in Port 1 is stopped');
         data.port1CarName = '';
         data.port1PersonName = '';
-        this.sendAlertToPerson(carDetail.carName, ' charging in Port 1 is stopped');
       } else if (carDetail?.carName === data.port2CarName) {
         data.isPort2Available = true;
         data.port2Availablility = "Available";
+        this.sendAlertToPerson(data.port2PersonName, carDetail.carName, ' charging in Port 2 is stopped');
         data.port2CarName = '';
         data.port2PersonName = '';
-        this.sendAlertToPerson(carDetail.carName, ' charging in Port 2 is stopped');
       }
       this.updateCarStatus(selectedCar, "Completed");
       this.carsInUse = this.carsInUse.filter(car => car.carId != selectedCar);
