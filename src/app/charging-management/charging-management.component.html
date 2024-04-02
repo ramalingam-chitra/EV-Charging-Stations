@@ -1,13 +1,16 @@
-<h1>EV-Charging-Station</h1>
+<h1>EV Charging Management System</h1>
+<span>Hassle free charging in one touch</span>
 <ng-container>
   <div>
+    <h2>Start Charging</h2>
+    <span>Choose the Port and Start Charging at your convinence</span>
     <div>
       <mat-form-field>
         <mat-label>Select car to Charge</mat-label>
         <mat-select [(value)]="selectedCar">
           <mat-option>None</mat-option>
           <mat-option *ngFor="let car of cars"
-          [value]="car.carId">{{car.carName}}</mat-option>
+          [value]="car.carId" >{{car.carName}}</mat-option>
         </mat-select>
       </mat-form-field>
     </div>
@@ -52,19 +55,37 @@
     </div>
     <div>
       <button mat-flat-button color="primary" (click)="startCharging(selectedCar, selectedStation, selectedWattPort1,selectedWattPort2)">Start Charging</button>
-      <button mat-flat-button color="warn" (click)="stopCharging(1)">Stop Charging</button>
+    </div>
+  </div>
+  <div>
+    <h2>Stop Charging</h2>
+    <span>Battery full or enough of charging stop charging and pave way to other cars</span>
+    <div>
+      <mat-form-field>
+        <mat-label>Select car to Charge</mat-label>
+        <mat-select [(value)]="selectedCarForStopCharge">
+          <mat-option>None</mat-option>
+          <mat-option *ngFor="let car of carsInUse"
+          [value]="car.carId">{{car.carName}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <span>{{chargeStopMessage}}</span>
+      <div>
+      <button mat-flat-button color="warn" (click)="stopCharging(selectedCarForStopCharge)">Stop Charging</button>
+    </div>
     </div>
   </div>
 </ng-container>
+<div></div>
 <ng-container>
   <mat-expansion-panel>
     <mat-expansion-panel-header>
       <mat-panel-description>
-        Available Station and Ports
+        <h2>Status of Resources</h2>
       </mat-panel-description>
     </mat-expansion-panel-header>
     <div>
-      <app-simple-mat-table [inputData]=chargingStationData></app-simple-mat-table>
+      <app-charging-status-table [inputData]=chargingStationData></app-charging-status-table>
     </div>
   </mat-expansion-panel>
 </ng-container>

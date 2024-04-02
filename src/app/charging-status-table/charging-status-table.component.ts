@@ -3,11 +3,11 @@ import { MatTableDataSource } from '@angular/material/table';
 import { Station } from '../model/charging-model';
 
 @Component({
-  selector: 'app-simple-mat-table',
-  templateUrl: './simple-mat-table.component.html',
-  styleUrls: ['./simple-mat-table.component.scss'],
+  selector: 'app-charging-status-table',
+  templateUrl: './charging-status-table.component.html',
+  styleUrls: ['./charging-status-table.component.scss'],
 })
-export class SimpleMatTableComponent implements OnInit {
+export class ChargingStatusTableComponent implements OnInit {
   
   displayedColumns: Array<any> | undefined;
   displayedColumnsKeys: string[] | undefined;
