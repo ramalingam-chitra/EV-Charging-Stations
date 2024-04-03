@@ -39,6 +39,10 @@ export class ChargingStatusTableComponent implements OnInit {
         header: 'Person'
       },
       {
+        key: 'port1Timer',
+        header: 'Remaining Time'
+      },
+      {
         key: 'port2Availablility',
         header: 'Port 2'
       },
@@ -49,6 +53,10 @@ export class ChargingStatusTableComponent implements OnInit {
       {
         key: 'port2PersonName',
         header: 'Person'
+      },
+      {
+        key: 'port2Timer',
+        header: 'Remaining Time'
       },
     ];
 

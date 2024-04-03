@@ -14,7 +14,9 @@ export interface Station {
   port2CarName: string;
   port2PersonName: string;
   port2Availablility: string;
-  port2RemainingHrs:number
+  port2RemainingHrs:number;
+  port1Timer: string;
+  port2Timer: string;
 }
 
 export interface PortDetails {

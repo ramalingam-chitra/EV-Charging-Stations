@@ -10,9 +10,16 @@ export class ChargingManagementComponent implements OnInit {
   isPort2Disabled: boolean = false;
   isPort1Disabled: boolean = false;
   time: number = 0;
-  display: string | undefined ;
+  display: any ;
   interval: any;
-  
+  selectedStation: any;
+  selectedWattPort1: any;
+  selectedWattPort2: any;
+  selectedCar: any;
+  selectedCarForStopCharge: any;
+  chargeStopMessage = '';
+  showChargingStationData: boolean = false;
+
   constructor() { }
 
   ngAfterViewInit() { 
@@ -22,14 +29,6 @@ export class ChargingManagementComponent implements OnInit {
       window.alert('Charging station is open only between 8AM and 5PM');
     }
   }
-
-  selectedStation: any;
-  selectedWattPort1: any;
-  selectedWattPort2: any;
-  selectedCar: any;
-  selectedCarForStopCharge: any;
-  chargeStopMessage = '';
-  showChargingStationData: boolean = false;
 
   chargingStationData: Station[] = [
     {
@@ -48,7 +47,9 @@ export class ChargingManagementComponent implements OnInit {
       port2CarName: '-',
       port2PersonName: '-',
       port2Availablility: 'Available',
-      port2RemainingHrs:0
+      port2RemainingHrs:0,
+      port1Timer:'',
+      port2Timer:''
     },
     {
       stationId: 2,
@@ -66,7 +67,9 @@ export class ChargingManagementComponent implements OnInit {
       port2CarName: '-',
       port2PersonName: '-',
       port2Availablility: 'Available',
-      port2RemainingHrs:0
+      port2RemainingHrs:0,
+      port1Timer:'',
+      port2Timer:''
     },
     {
       stationId: 3,
@@ -84,7 +87,9 @@ export class ChargingManagementComponent implements OnInit {
       port2CarName: '-',
       port2PersonName: '-',
       port2Availablility: 'Available',
-      port2RemainingHrs:0
+      port2RemainingHrs:0,
+      port1Timer:'',
+      port2Timer:''
     },
     {
       stationId: 4,
@@ -102,7 +107,9 @@ export class ChargingManagementComponent implements OnInit {
       port2CarName: '-',
       port2PersonName: '-',
       port2Availablility: 'Available',
-      port2RemainingHrs:0
+      port2RemainingHrs:0,
+      port1Timer:'',
+      port2Timer:''
     },
     {
       stationId: 5,
@@ -120,7 +127,9 @@ export class ChargingManagementComponent implements OnInit {
       port2CarName: '-',
       port2PersonName: '-',
       port2Availablility: 'Available',
-      port2RemainingHrs:0
+      port2RemainingHrs:0,
+      port1Timer:'',
+      port2Timer:''
     },
   ];
 
@@ -146,7 +155,7 @@ export class ChargingManagementComponent implements OnInit {
   cars = [
     {
       carId: 1,
-      availableCharge: 0,
+      availableCharge: 78,
       carName: 'TES1',
       personName: 'PERS1',
       chargingStatus: 'In Progress'
@@ -307,7 +316,7 @@ export class ChargingManagementComponent implements OnInit {
   }
 
   disableAllPorts() {
-    this.disableAllStationAndPorts = true;
+    this.disableAllStationAndPorts = false;
   }
 
   sendAlertToPerson(personId: any, carId: any, message: string) {
@@ -329,7 +338,7 @@ export class ChargingManagementComponent implements OnInit {
       selectedStation.port1PersonName = car?.personName || '';
       selectedStation.isPort2Disabled = this.isPort2Disabled = true;
       selectedStation.port1RemainingHrs = this.calHoursOfCharging(car?.personName, car?.carName, car?.availableCharge, selectedWattPort1);
-      this.startTimer(selectedStation.port1CarName, selectedStation.port1PersonName, selectedStation.port1RemainingHrs);
+      this.startTimer(selectedStation, 1, selectedStation.port1CarName, selectedStation.port1PersonName, selectedStation.port1RemainingHrs);
     } else if (selectedWattPort2 && selectedStation) {
       selectedStation.isPort2Available = false;
       selectedStation.port2Availablility = "Not available";
@@ -337,22 +346,30 @@ export class ChargingManagementComponent implements OnInit {
       selectedStation.port2PersonName = car?.personName || '';
       selectedStation.isPort1Disabled = this.isPort2Disabled = true;
       selectedStation.port2RemainingHrs = this.calHoursOfCharging(car?.personName,car?.carName, car?.availableCharge, selectedWattPort2);
-      this.startTimer(selectedStation.port2CarName, selectedStation.port2PersonName, selectedStation.port2RemainingHrs);
+      this.startTimer(selectedStation, 2, selectedStation.port2CarName, selectedStation.port2PersonName, selectedStation.port2RemainingHrs);
     }
     this.carsInUse.push(this.getCarDetailsById(selectedCar));
     this.carsInQueue = this.carsInQueue.filter(car => car.carId != selectedCar);
     this.clearStationAndPort();
   }
-  startTimer(port1CarName: string, port1PersonName: string, port1RemainingHrs: number) {
-      console.log("=====>");
+  startTimer(selectedStation: any, selectedPort: number, carName: string, personName: string, port1RemainingHrs: number) : string{
+      this.time = port1RemainingHrs*3600;
       this.interval = setInterval(() => {
-        if (this.time === 0) {
-          this.time++;
+        if (this.time != 0) {
+          this.time--;
         } else {
-          this.time++;
+          this.time--;
         }
-        this.display=this.transform( this.time)
+        this.display = this.transform( this.time);
+        if(this.display === '0:0:0'){
+          this.sendAlertToPerson(carName, personName, ' charging is completed')
+        }
+        if (selectedPort==1) {
+          selectedStation.port1Timer =  this.display;} 
+        else if(selectedPort==2){
+          selectedStation.port2Timer =  this.display;} 
       }, 1000);
+      return this.display;
     }
     transform(value: number): string {
       var sec_num = value; 
@@ -363,7 +380,7 @@ export class ChargingManagementComponent implements OnInit {
       if (hours   < 10) {hours   = 0;}
       if (minutes < 10) {minutes = 0;}
       if (seconds < 0) {seconds = 0;}
-      return hours+':'+minutes+':'+seconds;
+      return Math.round(hours)+':'+Math.round(minutes)+':'+Math.round(seconds);
     }
   calHoursOfCharging(person: any,selectedCar: any, availableCharge: number | undefined, selectedWattPort: any) {
     let remaininghrs = (80 - (availableCharge? availableCharge :0))/selectedWattPort;

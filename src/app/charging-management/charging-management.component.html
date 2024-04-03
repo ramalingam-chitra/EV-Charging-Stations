@@ -58,8 +58,7 @@
       </mat-form-field>
     </div>
     <div>
-      <button mat-flat-button color="primary" (click)="startCharging(selectedCar, selectedStation, selectedWattPort1,selectedWattPort2)">Start Charging</button>
-      <p>{{display }}</p> 
+      <button mat-flat-button color="primary"  [disabled]="disableAllStationAndPorts" (click)="startCharging(selectedCar, selectedStation, selectedWattPort1,selectedWattPort2)">Start Charging</button>
     </div>
   </div>
   <div class="m30 border">
@@ -76,7 +75,7 @@
       </mat-form-field>
       <span>{{chargeStopMessage}}</span>
       <div>
-      <button mat-flat-button color="warn" (click)="stopCharging(selectedCarForStopCharge)">Stop Charging</button>
+      <button mat-flat-button color="warn"  [disabled]="disableAllStationAndPorts" (click)="stopCharging(selectedCarForStopCharge)">Stop Charging</button>
     </div>
     </div>
   </div>
