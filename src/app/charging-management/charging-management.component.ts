@@ -340,6 +340,10 @@ export class ChargingManagementComponent implements OnInit {
   * Return: none
   **/
   startCharging(selectedCar: any, selectedStationId: any, selectedWattPort1: any, selectedWattPort2: any, currentValue: any) {
+    if (selectedCar == undefined) {
+      window.alert("Please select Car");
+      return;
+    }
     if (selectedWattPort1 == undefined && selectedWattPort2 == undefined) {
       window.alert("Please select a Port to start charging");
       return;
