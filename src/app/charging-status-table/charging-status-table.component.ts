@@ -24,31 +24,31 @@ export class ChargingStatusTableComponent implements OnInit {
     this.displayedColumns= [
       {
         key: 'stationName',
-        header: 'Station Name'
+        header: 'Station'
       },
       {
         key: 'port1Availablility',
-        header: 'Port 1 Availability'
+        header: 'Port 1'
       },
       {
         key: 'port1CarName',
-        header: 'Car in Port 1'
+        header: 'Car'
       },
       {
         key: 'port1PersonName',
-        header: 'Person in charge - Port 1'
+        header: 'Person'
       },
       {
         key: 'port2Availablility',
-        header: 'Port 2 Availability'
+        header: 'Port 2'
       },
       {
         key: 'port2CarName',
-        header: 'Car in Port 2'
+        header: 'Car'
       },
       {
         key: 'port2PersonName',
-        header: 'Person in charge - Port 2'
+        header: 'Person'
       },
     ];
 

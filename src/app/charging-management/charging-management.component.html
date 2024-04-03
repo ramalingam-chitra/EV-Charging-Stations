@@ -1,9 +1,13 @@
-<h1>EV Charging Management System</h1>
-<span>Hassle free charging in one touch</span>
-<ng-container>
-  <div>
-    <h2>Start Charging</h2>
-    <span>Choose the Port and Start Charging at your convinence</span>
+<h1 class="title mb0">EV Charging Management System</h1>
+<span class="desc">Hassle free charging in one touch</span> 
+<br>
+<br>
+<div class="flex">
+  
+<ng-container class="start-stop">
+  <div class="m30">
+    <h2 class="mb0 sub-title">Start Charging</h2>
+    <span class="start-stop-desc mb0">Choose the Port and Start Charging <br> at your convinence</span>
     <div>
       <mat-form-field>
         <mat-label>Select car to Charge</mat-label>
@@ -57,9 +61,9 @@
       <button mat-flat-button color="primary" (click)="startCharging(selectedCar, selectedStation, selectedWattPort1,selectedWattPort2)">Start Charging</button>
     </div>
   </div>
-  <div>
-    <h2>Stop Charging</h2>
-    <span>Battery full or enough of charging stop charging and pave way to other cars</span>
+  <div class="m30">
+    <h2 class="mb0 sub-title">Stop Charging</h2>
+    <span class="start-stop-desc mb0">Battery full or enough of charging? <br> stop charging and pave way to other cars</span>
     <div>
       <mat-form-field>
         <mat-label>Select car to Charge</mat-label>
@@ -77,15 +81,11 @@
   </div>
 </ng-container>
 <div></div>
-<ng-container>
-  <mat-expansion-panel>
-    <mat-expansion-panel-header>
-      <mat-panel-description>
-        <h2>Status of Resources</h2>
-      </mat-panel-description>
-    </mat-expansion-panel-header>
-    <div>
+<ng-container class="status">
+    <div> 
+      <h2 class="sub-title mb0">Status of Resources</h2>
+      <span class="start-stop-desc">View available resources and its status</span>
       <app-charging-status-table [inputData]=chargingStationData></app-charging-status-table>
     </div>
-  </mat-expansion-panel>
 </ng-container>
+</div>
