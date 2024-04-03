@@ -5,6 +5,7 @@ export interface Station {
   selectedWattsForPort1Value: number;
   isPort1Disabled: boolean;
   isPort2Available: boolean;
+  port1RemainingHrs:number
   selectedWattsForPort2Value: number;
   isPort2Disabled: boolean;
   port1CarName: string;
@@ -13,6 +14,7 @@ export interface Station {
   port2CarName: string;
   port2PersonName: string;
   port2Availablility: string;
+  port2RemainingHrs:number
 }
 
 export interface PortDetails {

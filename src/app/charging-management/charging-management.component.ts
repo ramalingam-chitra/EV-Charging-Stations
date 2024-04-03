@@ -9,7 +9,10 @@ import { Station } from '../model/charging-model';
 export class ChargingManagementComponent implements OnInit {
   isPort2Disabled: boolean = false;
   isPort1Disabled: boolean = false;
-
+  time: number = 0;
+  display: string | undefined ;
+  interval: any;
+  
   constructor() { }
 
   ngAfterViewInit() { }
@@ -26,50 +29,56 @@ export class ChargingManagementComponent implements OnInit {
     {
       stationId: 1,
       stationName: 'Station 1',
-      isPort1Available: false,
+      isPort1Available: true,
       selectedWattsForPort1Value: 0,
       isPort1Disabled: false,
-      isPort2Available: false,
+      isPort2Available: true,
       selectedWattsForPort2Value: 3.2,
       isPort2Disabled: false,
-      port1CarName: 'TES1',
-      port1PersonName: 'PER1',
-      port1Availablility: 'Not Available',
-      port2CarName: 'TES2',
-      port2PersonName: 'PER2',
-      port2Availablility: 'Not Available'
+      port1CarName: '-',
+      port1PersonName: '-',
+      port1Availablility: 'Available',
+      port1RemainingHrs:0,
+      port2CarName: '-',
+      port2PersonName: '-',
+      port2Availablility: 'Available',
+      port2RemainingHrs:0
     },
     {
       stationId: 2,
       stationName: 'Station 2',
-      isPort1Available: false,
+      isPort1Available: true,
       selectedWattsForPort1Value: 3.2,
       isPort1Disabled: false,
-      isPort2Available: false,
+      isPort2Available: true,
       selectedWattsForPort2Value: 3.2,
       isPort2Disabled: false,
-      port1CarName: 'TES3',
-      port1PersonName: 'PER3',
-      port1Availablility: 'Not Available',
-      port2CarName: 'TES4',
-      port2PersonName: 'PER4',
-      port2Availablility: 'Not Available'
+      port1CarName: '-',
+      port1PersonName: '-',
+      port1Availablility: 'Available',
+      port1RemainingHrs:0,
+      port2CarName: '-',
+      port2PersonName: '-',
+      port2Availablility: 'Available',
+      port2RemainingHrs:0
     },
     {
       stationId: 3,
       stationName: 'Station 3',
-      isPort1Available: false,
+      isPort1Available: true,
       selectedWattsForPort1Value: 3.2,
-      isPort1Disabled: true,
+      isPort1Disabled: false,
       isPort2Available: true,
       selectedWattsForPort2Value: 3.2,
       isPort2Disabled: false,
-      port1CarName: 'TES5',
-      port1PersonName: 'PER5',
-      port1Availablility: 'Not Available',
-      port2CarName: '',
-      port2PersonName: '',
-      port2Availablility: 'Available'
+      port1CarName: '-',
+      port1PersonName: '-',
+      port1Availablility: 'Available',
+      port1RemainingHrs:0,
+      port2CarName: '-',
+      port2PersonName: '-',
+      port2Availablility: 'Available',
+      port2RemainingHrs:0
     },
     {
       stationId: 4,
@@ -80,12 +89,14 @@ export class ChargingManagementComponent implements OnInit {
       isPort2Available: true,
       selectedWattsForPort2Value: 3.2,
       isPort2Disabled: false,
-      port1CarName: '',
-      port1PersonName: '',
+      port1CarName: '-',
+      port1PersonName: '-',
       port1Availablility: 'Available',
-      port2CarName: '',
-      port2PersonName: '',
-      port2Availablility: 'Available'
+      port1RemainingHrs:0,
+      port2CarName: '-',
+      port2PersonName: '-',
+      port2Availablility: 'Available',
+      port2RemainingHrs:0
     },
     {
       stationId: 5,
@@ -96,37 +107,20 @@ export class ChargingManagementComponent implements OnInit {
       isPort2Available: true,
       selectedWattsForPort2Value: 3.2,
       isPort2Disabled: false,
-      port1CarName: '',
-      port1PersonName: '',
+      port1CarName: '-',
+      port1PersonName: '-',
       port1Availablility: 'Available',
-      port2CarName: '',
-      port2PersonName: '',
-      port2Availablility: 'Available'
+      port1RemainingHrs:0,
+      port2CarName: '-',
+      port2PersonName: '-',
+      port2Availablility: 'Available',
+      port2RemainingHrs:0
     },
   ];
 
   availableWatts = [
     {
       value: 3.2,
-      displayName: '3.2 KWh',
-    },
-    {
-      value: 7.2,
-      displayName: '7.2 KWh',
-    },
-    {
-      value: 11,
-      displayName: '11 KWh',
-    },
-    {
-      value: 22,
-      displayName: '22 KWh',
-    },
-  ];
-
-  availableStations = [
-    {
-      stationId: 3.2,
       displayName: '3.2 KWh',
     },
     {
@@ -252,6 +246,8 @@ export class ChargingManagementComponent implements OnInit {
   ];
 
   carsInUse: any[] = [];
+  carsInQueue: any[] = this.cars;
+
   disableAllStationAndPorts: boolean = false; //change to true while checking time
 
   ngOnInit() {
@@ -299,8 +295,10 @@ export class ChargingManagementComponent implements OnInit {
           this.isPort2Disabled = false;
         } else if (station.isPort1Available) {
           this.isPort1Disabled = false;
+          this.isPort2Disabled = true;
         } else if (station.isPort2Available) {
           this.isPort2Disabled = false;
+          this.isPort1Disabled = true;
         } else {
           this.isPort1Disabled = true;
           this.isPort2Disabled = true;
@@ -331,22 +329,47 @@ export class ChargingManagementComponent implements OnInit {
       selectedStation.port1CarName = car?.carName || '';
       selectedStation.port1PersonName = car?.personName || '';
       selectedStation.isPort2Disabled = this.isPort2Disabled = true;
-      this.calHoursOfCharging(car?.personName, car?.carName, car?.availableCharge, selectedWattPort1);
+      selectedStation.port1RemainingHrs = this.calHoursOfCharging(car?.personName, car?.carName, car?.availableCharge, selectedWattPort1);
+      this.startTimer(selectedStation.port1CarName, selectedStation.port1PersonName, selectedStation.port1RemainingHrs);
     } else if (selectedWattPort2 && selectedStation) {
       selectedStation.isPort2Available = false;
       selectedStation.port2Availablility = "Not available";
       selectedStation.port2CarName = car?.carName || '';
       selectedStation.port2PersonName = car?.personName || '';
       selectedStation.isPort1Disabled = this.isPort2Disabled = true;
-      this.calHoursOfCharging(car?.personName,car?.carName, car?.availableCharge, selectedWattPort2);
+      selectedStation.port2RemainingHrs = this.calHoursOfCharging(car?.personName,car?.carName, car?.availableCharge, selectedWattPort2);
+      this.startTimer(selectedStation.port2CarName, selectedStation.port2PersonName, selectedStation.port2RemainingHrs);
     }
     this.carsInUse.push(this.getCarDetailsById(selectedCar));
-    this.cars = this.cars.filter(car => car.carId != selectedCar);
-    console.log("car id : ", selectedCar + "charging is in progress");
+    this.carsInQueue = this.carsInQueue.filter(car => car.carId != selectedCar);
+    this.clearStationAndPort();
   }
+  startTimer(port1CarName: string, port1PersonName: string, port1RemainingHrs: number) {
+      console.log("=====>");
+      this.interval = setInterval(() => {
+        if (this.time === 0) {
+          this.time++;
+        } else {
+          this.time++;
+        }
+        this.display=this.transform( this.time)
+      }, 1000);
+    }
+    transform(value: number): string {
+      var sec_num = value; 
+      var hours   = Math.floor(sec_num / 3600);
+      var minutes = Math.floor((sec_num - (hours * 3600)) / 60);
+      var seconds = sec_num - (hours * 3600) - (minutes * 60);
+
+      if (hours   < 10) {hours   = 0;}
+      if (minutes < 10) {minutes = 0;}
+      if (seconds < 0) {seconds = 0;}
+      return hours+':'+minutes+':'+seconds;
+    }
   calHoursOfCharging(person: any,selectedCar: any, availableCharge: number | undefined, selectedWattPort: any) {
     let remaininghrs = (80 - (availableCharge? availableCharge :0))/selectedWattPort;
     this.sendAlertToPerson(person, selectedCar, " charging is in progress. Remaining hours : " + Math.round(remaininghrs));
+    return remaininghrs;
   }
 
   enableAllPorts() {
@@ -390,6 +413,7 @@ export class ChargingManagementComponent implements OnInit {
         data.port2PersonName = '';
       }
       this.updateCarStatus(selectedCar, "Completed");
+      this.carsInQueue.push(this.carsInUse.filter(car => car.carId == selectedCar));
       this.carsInUse = this.carsInUse.filter(car => car.carId != selectedCar);
     })
   }
@@ -403,5 +427,11 @@ export class ChargingManagementComponent implements OnInit {
       }
     })
     return false;
+  }
+
+  clearStationAndPort () {
+    this.selectedStation = "";
+    this.selectedWattPort1 = '';
+    this.selectedWattPort2 = '';
   }
 }
