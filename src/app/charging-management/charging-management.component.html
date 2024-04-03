@@ -10,7 +10,7 @@
     <span class="start-stop-desc mb0">Choose the Port and Start Charging <br> at your convinence</span>
     <div>
       <mat-form-field>
-        <mat-label>Select car to Charge</mat-label>
+        <mat-label>Select car to charge</mat-label>
         <mat-select [(value)]="selectedCar" (selectionChange)="clearStationAndPort()">
           <mat-option>None</mat-option>
           <mat-option *ngFor="let car of carsInQueue"
@@ -67,7 +67,7 @@
     <span class="start-stop-desc mb0">Battery full or enough of charging? <br> stop charging and pave way to other cars</span>
     <div>
       <mat-form-field>
-        <mat-label>Select car to Charge</mat-label>
+        <mat-label>Select car to stop charging</mat-label>
         <mat-select [(value)]="selectedCarForStopCharge">
           <mat-option>None</mat-option>
           <mat-option *ngFor="let car of carsInUse"

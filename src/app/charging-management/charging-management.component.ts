@@ -15,7 +15,13 @@ export class ChargingManagementComponent implements OnInit {
   
   constructor() { }
 
-  ngAfterViewInit() { }
+  ngAfterViewInit() { 
+    let today = new Date();
+    if (today.getHours() <= 8 && today.getHours() >= 17) {
+      this.disableAllPorts();
+      window.alert('Charging station is open only between 8AM and 5PM');
+    }
+  }
 
   selectedStation: any;
   selectedWattPort1: any;
@@ -251,14 +257,7 @@ export class ChargingManagementComponent implements OnInit {
   disableAllStationAndPorts: boolean = false; //change to true while checking time
 
   ngOnInit() {
-    let today = new Date();
-    if (today.getHours() <= 8 && today.getHours() >= 17) {
-      //if (false){
-      console.log('Charging station is open only between 8AM and 5PM');
-      this.disableAllPorts();
-    }
-    console.log('charging stations detail : ', this.chargingStationData);
-    console.log('car detail : ', this.cars);
+    
   }
 
   ngDoCheck() { }
@@ -412,10 +411,11 @@ export class ChargingManagementComponent implements OnInit {
         data.port2CarName = '';
         data.port2PersonName = '';
       }
-      this.updateCarStatus(selectedCar, "Completed");
-      this.carsInQueue.push(this.carsInUse.filter(car => car.carId == selectedCar));
-      this.carsInUse = this.carsInUse.filter(car => car.carId != selectedCar);
     })
+    this.updateCarStatus(selectedCar, "Completed");
+    this.carsInQueue.push(this.getCarDetailsById(selectedCar));
+    this.carsInUse = this.carsInUse.filter(car => car.carId != selectedCar);
+    this.selectedCar = '';
   }
 
   checkCarStatus() {
