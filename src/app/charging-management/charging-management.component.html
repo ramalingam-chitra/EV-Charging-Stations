@@ -5,13 +5,13 @@
 <div class="flex">
   
 <ng-container class="start-stop">
-  <div class="m30">
+  <div class="m30 border">
     <h2 class="mb0 sub-title">Start Charging</h2>
     <span class="start-stop-desc mb0">Choose the Port and Start Charging <br> at your convinence</span>
     <div>
-      <mat-form-field>
+      <mat-form-field class="mt10">
         <mat-label>Select car to charge</mat-label>
-        <mat-select [(value)]="selectedCar" (selectionChange)="clearStationAndPort()">
+        <mat-select [(value)]="selectedCar" (selectionChange)="clearStationAndPort()"  [disabled]="disableAllStationAndPorts">
           <mat-option>None</mat-option>
           <mat-option *ngFor="let car of carsInQueue"
           [value]="car.carId" >{{car.carName}}</mat-option>
@@ -21,7 +21,7 @@
     <div>
       <mat-form-field>
         <mat-label>Select station</mat-label>
-        <mat-select [(value)]="selectedStation" (selectionChange)="checkAvailablePorts(selectedStation)">
+        <mat-select [(value)]="selectedStation" (selectionChange)="checkAvailablePorts(selectedStation)"  [disabled]="disableAllStationAndPorts">
           <mat-option>None</mat-option>
           <mat-option value="1">Station 1</mat-option>
           <mat-option value="2">Station 2</mat-option>
@@ -62,13 +62,13 @@
       <p>{{display }}</p> 
     </div>
   </div>
-  <div class="m30">
+  <div class="m30 border">
     <h2 class="mb0 sub-title">Stop Charging</h2>
     <span class="start-stop-desc mb0">Battery full or enough of charging? <br> stop charging and pave way to other cars</span>
     <div>
-      <mat-form-field>
+      <mat-form-field class="mt10">
         <mat-label>Select car to stop charging</mat-label>
-        <mat-select [(value)]="selectedCarForStopCharge">
+        <mat-select [(value)]="selectedCarForStopCharge"  [disabled]="disableAllStationAndPorts">
           <mat-option>None</mat-option>
           <mat-option *ngFor="let car of carsInUse"
           [value]="car.carId">{{car.carName}}</mat-option>
@@ -83,7 +83,7 @@
 </ng-container>
 <div></div>
 <ng-container class="status">
-    <div> 
+    <div class="m30"> 
       <h2 class="sub-title mb0">Status of Resources</h2>
       <span class="start-stop-desc">View available resources and its status</span>
       <app-charging-status-table [inputData]=chargingStationData></app-charging-status-table>

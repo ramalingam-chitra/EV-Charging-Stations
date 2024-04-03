@@ -17,7 +17,7 @@ export class ChargingManagementComponent implements OnInit {
 
   ngAfterViewInit() { 
     let today = new Date();
-    if (today.getHours() <= 8 && today.getHours() >= 17) {
+    if (today.getHours() <= 8 || today.getHours() >= 17) {
       this.disableAllPorts();
       window.alert('Charging station is open only between 8AM and 5PM');
     }
