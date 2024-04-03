@@ -10,6 +10,10 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatSelectModule } from '@angular/material/select';
 import {MatExpansionModule} from '@angular/material/expansion';
 import { MatDividerModule } from '@angular/material/divider';
+import { FormsModule } from '@angular/forms';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatTableModule } from '@angular/material/table';
+import { MatInputModule } from '@angular/material/input';
 
 @NgModule({
   declarations: [AppComponent, ChargingStatusTableComponent, ChargingManagementComponent],
@@ -21,7 +25,11 @@ import { MatDividerModule } from '@angular/material/divider';
     MatButtonModule,
     MatSelectModule,
     MatExpansionModule,
-    MatDividerModule
+    MatDividerModule,
+    FormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatTableModule
   ],
   providers: [],
   bootstrap: [AppComponent],

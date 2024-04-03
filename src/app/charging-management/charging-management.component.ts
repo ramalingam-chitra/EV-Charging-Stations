@@ -10,7 +10,7 @@ export class ChargingManagementComponent implements OnInit {
   isPort2Disabled: boolean = false;
   isPort1Disabled: boolean = false;
   time: number = 0;
-  display: any ;
+  display: any;
   interval: any;
   selectedStation: any;
   selectedWattPort1: any;
@@ -19,17 +19,18 @@ export class ChargingManagementComponent implements OnInit {
   selectedCarForStopCharge: any;
   chargeStopMessage = '';
   showChargingStationData: boolean = false;
+  currentValue: any;
 
   constructor() { }
 
-  ngAfterViewInit() { 
+  ngAfterViewInit() {
     let today = new Date();
     if (today.getHours() <= 8 || today.getHours() >= 17) {
       this.disableAllPorts();
       window.alert('Charging station is open only between 8AM and 5PM');
     }
   }
-
+  //Data model value
   chargingStationData: Station[] = [
     {
       stationId: 1,
@@ -43,13 +44,13 @@ export class ChargingManagementComponent implements OnInit {
       port1CarName: '-',
       port1PersonName: '-',
       port1Availablility: 'Available',
-      port1RemainingHrs:0,
+      port1RemainingHrs: 0,
       port2CarName: '-',
       port2PersonName: '-',
       port2Availablility: 'Available',
-      port2RemainingHrs:0,
-      port1Timer:'',
-      port2Timer:''
+      port2RemainingHrs: 0,
+      port1Timer: '',
+      port2Timer: ''
     },
     {
       stationId: 2,
@@ -63,13 +64,13 @@ export class ChargingManagementComponent implements OnInit {
       port1CarName: '-',
       port1PersonName: '-',
       port1Availablility: 'Available',
-      port1RemainingHrs:0,
+      port1RemainingHrs: 0,
       port2CarName: '-',
       port2PersonName: '-',
       port2Availablility: 'Available',
-      port2RemainingHrs:0,
-      port1Timer:'',
-      port2Timer:''
+      port2RemainingHrs: 0,
+      port1Timer: '',
+      port2Timer: ''
     },
     {
       stationId: 3,
@@ -83,13 +84,13 @@ export class ChargingManagementComponent implements OnInit {
       port1CarName: '-',
       port1PersonName: '-',
       port1Availablility: 'Available',
-      port1RemainingHrs:0,
+      port1RemainingHrs: 0,
       port2CarName: '-',
       port2PersonName: '-',
       port2Availablility: 'Available',
-      port2RemainingHrs:0,
-      port1Timer:'',
-      port2Timer:''
+      port2RemainingHrs: 0,
+      port1Timer: '',
+      port2Timer: ''
     },
     {
       stationId: 4,
@@ -103,13 +104,13 @@ export class ChargingManagementComponent implements OnInit {
       port1CarName: '-',
       port1PersonName: '-',
       port1Availablility: 'Available',
-      port1RemainingHrs:0,
+      port1RemainingHrs: 0,
       port2CarName: '-',
       port2PersonName: '-',
       port2Availablility: 'Available',
-      port2RemainingHrs:0,
-      port1Timer:'',
-      port2Timer:''
+      port2RemainingHrs: 0,
+      port1Timer: '',
+      port2Timer: ''
     },
     {
       stationId: 5,
@@ -123,13 +124,13 @@ export class ChargingManagementComponent implements OnInit {
       port1CarName: '-',
       port1PersonName: '-',
       port1Availablility: 'Available',
-      port1RemainingHrs:0,
+      port1RemainingHrs: 0,
       port2CarName: '-',
       port2PersonName: '-',
       port2Availablility: 'Available',
-      port2RemainingHrs:0,
-      port1Timer:'',
-      port2Timer:''
+      port2RemainingHrs: 0,
+      port1Timer: '',
+      port2Timer: ''
     },
   ];
 
@@ -155,38 +156,38 @@ export class ChargingManagementComponent implements OnInit {
   cars = [
     {
       carId: 1,
-      availableCharge: 78,
+      availableCharge: 0,
       carName: 'TES1',
       personName: 'PERS1',
-      chargingStatus: 'In Progress'
+      chargingStatus: 'In Queue'
     },
     {
       carId: 2,
-      availableCharge: 50,
+      availableCharge: 0,
       carName: 'TES2',
       personName: 'PERS2',
-      chargingStatus: 'In Progress'
+      chargingStatus: 'In Queue'
     },
     {
       carId: 3,
       availableCharge: 0,
       carName: 'TES3',
       personName: 'PERS3',
-      chargingStatus: 'In Progress'
+      chargingStatus: 'In Queue'
     },
     {
       carId: 4,
-      availableCharge: 70,
+      availableCharge: 0,
       carName: 'TES4',
       personName: 'PERS4',
-      chargingStatus: 'In Progress'
+      chargingStatus: 'In Queue'
     },
     {
       carId: 5,
-      availableCharge: 60,
+      availableCharge: 0,
       carName: 'TES5',
       personName: 'PERS5',
-      chargingStatus: 'In Progress'
+      chargingStatus: 'In Queue'
     },
     {
       carId: 6,
@@ -197,35 +198,35 @@ export class ChargingManagementComponent implements OnInit {
     },
     {
       carId: 7,
-      availableCharge: 30,
+      availableCharge: 0,
       carName: 'TES7',
       personName: 'PERS7',
       chargingStatus: 'In Queue'
     },
     {
       carId: 8,
-      availableCharge: 10,
+      availableCharge: 0,
       carName: 'TES8',
       personName: 'PERS8',
       chargingStatus: 'In Queue'
     },
     {
       carId: 9,
-      availableCharge: 10,
+      availableCharge: 0,
       carName: 'TES9',
       personName: 'PERS9',
       chargingStatus: 'In Queue'
     },
     {
       carId: 10,
-      availableCharge: 80,
+      availableCharge: 0,
       carName: 'TES10',
       personName: 'PERS10',
       chargingStatus: 'In Queue'
     },
     {
       carId: 11,
-      availableCharge: 30,
+      availableCharge: 0,
       carName: 'TES11',
       personName: 'PERS11',
       chargingStatus: 'In Queue'
@@ -263,15 +264,16 @@ export class ChargingManagementComponent implements OnInit {
   carsInUse: any[] = [];
   carsInQueue: any[] = this.cars;
 
-  disableAllStationAndPorts: boolean = false; //change to true while checking time
+  disableAllStationAndPorts: boolean = true;
 
-  ngOnInit() {
-    
-  }
+  ngOnInit() {}
 
-  ngDoCheck() { }
+  /** Func: changeWatts
+  * Desc: When user changes the Watts in port 1 or port 2 enable or disable values
+  * Params: change event, selected station, selected port
+  * Return: none
+  **/
   changeWatts(event: any, station: any, port: number) {
-    debugger;
     if (port == 1) {
       this.isPort2Disabled = true;
     } else {
@@ -289,12 +291,11 @@ export class ChargingManagementComponent implements OnInit {
     }
   }
 
-  changeStation(event: any) {
-    //check port status and enable or disable watts and ports
-    this.chargingStationData[event.value].isPort1Available = true;
-    console.log("Selected station: ", event)
-  }
-
+ /** Func: checkAvailablePorts
+  * Desc: When user changes the station enable or disable port
+  * Params: Selected station id
+  * Return: none
+  **/
   checkAvailablePorts(stationId: any) {
     for (const station of this.chargingStationData) {
       if (stationId === station.stationId.toString()) {
@@ -315,21 +316,40 @@ export class ChargingManagementComponent implements OnInit {
     }
   }
 
+  /** Func: disableAllPorts
+  * Desc: Disable all ports during non business hours
+  * Params: Selected station id
+  * Return: none
+  **/
   disableAllPorts() {
-    this.disableAllStationAndPorts = false;
+    this.disableAllStationAndPorts = true;
   }
 
+  /** Func: sendAlertToPerson
+  * Desc: Send alert to person whenever port is available, closed, charging initiated, charging completed
+  * Params: Person id, car id, message
+  * Return: none
+  **/
   sendAlertToPerson(personId: any, carId: any, message: string) {
-    window.alert('Dear ' +personId +", " +carId + message)
+    window.alert('Dear ' + personId + ", " + carId + message)
   }
 
-  startCharging(selectedCar: any, selectedStationId: any, selectedWattPort1: any, selectedWattPort2: any) {
+  /** Func: startCharging
+  * Desc: Start charging a car based on station, port selection, current charge and calculate remaining hours
+  * Params: selectedCar, selectedStationId, selectedWattPort1, selectedWattPort2, currentValue
+  * Return: none
+  **/
+  startCharging(selectedCar: any, selectedStationId: any, selectedWattPort1: any, selectedWattPort2: any, currentValue: any) {
     if (selectedWattPort1 == undefined && selectedWattPort2 == undefined) {
       window.alert("Please select a Port to start charging");
       return;
     }
+    if (currentValue == undefined || currentValue == null) {
+      window.alert("Please provide current battery level in KW");
+      return;
+    }
     let car = this.getCarDetailsById(selectedCar);
-    this.updateCarStatus(selectedCar, "In Progress");
+    this.updateCarStatus(selectedCar, currentValue, "In Progress");
     let selectedStation = this.chargingStationData.find((p) => p.stationId.toString() === selectedStationId);
     if (selectedWattPort1 && selectedStation) {
       selectedStation.isPort1Available = false;
@@ -345,49 +365,75 @@ export class ChargingManagementComponent implements OnInit {
       selectedStation.port2CarName = car?.carName || '';
       selectedStation.port2PersonName = car?.personName || '';
       selectedStation.isPort1Disabled = this.isPort2Disabled = true;
-      selectedStation.port2RemainingHrs = this.calHoursOfCharging(car?.personName,car?.carName, car?.availableCharge, selectedWattPort2);
+      selectedStation.port2RemainingHrs = this.calHoursOfCharging(car?.personName, car?.carName, car?.availableCharge, selectedWattPort2);
       this.startTimer(selectedStation, 2, selectedStation.port2CarName, selectedStation.port2PersonName, selectedStation.port2RemainingHrs);
     }
     this.carsInUse.push(this.getCarDetailsById(selectedCar));
     this.carsInQueue = this.carsInQueue.filter(car => car.carId != selectedCar);
     this.clearStationAndPort();
+    this.currentValue = '';
   }
-  startTimer(selectedStation: any, selectedPort: number, carName: string, personName: string, port1RemainingHrs: number) : string{
-      this.time = port1RemainingHrs*3600;
-      this.interval = setInterval(() => {
-        if (this.time != 0) {
-          this.time--;
-        } else {
-          this.time--;
-        }
-        this.display = this.transform( this.time);
-        if(this.display === '0:0:0'){
-          this.sendAlertToPerson(carName, personName, ' charging is completed')
-        }
-        if (selectedPort==1) {
-          selectedStation.port1Timer =  this.display;} 
-        else if(selectedPort==2){
-          selectedStation.port2Timer =  this.display;} 
-      }, 1000);
-      return this.display;
-    }
-    transform(value: number): string {
-      var sec_num = value; 
-      var hours   = Math.floor(sec_num / 3600);
-      var minutes = Math.floor((sec_num - (hours * 3600)) / 60);
-      var seconds = sec_num - (hours * 3600) - (minutes * 60);
 
-      if (hours   < 10) {hours   = 0;}
-      if (minutes < 10) {minutes = 0;}
-      if (seconds < 0) {seconds = 0;}
-      return Math.round(hours)+':'+Math.round(minutes)+':'+Math.round(seconds);
-    }
-  calHoursOfCharging(person: any,selectedCar: any, availableCharge: number | undefined, selectedWattPort: any) {
-    let remaininghrs = (80 - (availableCharge? availableCharge :0))/selectedWattPort;
+  /** Func: startTimer
+  * Desc: Start the count down for the charged car and send alert to person when charging completed
+  * Params:selectedStation, selectedPort, carName, personName, remainingHrs
+  * Return: none
+  **/
+  startTimer(selectedStation: any, selectedPort: number, carName: string, personName: string, remainingHrs: number): string {
+    this.time = remainingHrs * 3600;
+    this.interval = setInterval(() => {
+      if (this.time != 0) {
+        this.time--;
+      } else {
+        this.time--;
+      }
+      this.display = this.transform(this.time);
+      if (this.display === '0:0:0') {
+        this.sendAlertToPerson(carName, personName, ' charging is completed')
+      }
+      if (selectedPort == 1) {
+        selectedStation.port1Timer = this.display;
+      }
+      else if (selectedPort == 2) {
+        selectedStation.port2Timer = this.display;
+      }
+    }, 1000);
+    return this.display;
+  }
+
+  /** Func: transform
+  * Desc: Calculate remaining hrs based on current date time
+  * Params: remaining Hours In Seconds
+  * Return: value in hours, minutes and seconds
+  **/
+  transform(value: number): string {
+    var sec_num = value;
+    var hours = Math.floor(sec_num / 3600);
+    var minutes = Math.floor((sec_num - (hours * 3600)) / 60);
+    var seconds = sec_num - (hours * 3600) - (minutes * 60);
+
+    if (hours < 10) { hours = 0; }
+    if (minutes < 10) { minutes = 0; }
+    if (seconds < 0) { seconds = 0; }
+    return Math.round(hours) + ':' + Math.round(minutes) + ':' + Math.round(seconds);
+  }
+
+  /** Func: calHoursOfCharging
+  * Desc: Calculate remaining hrs based on current battery level and send alert as charging initiated
+  * Params: person, selectedCar, availableCharge | undefined, selectedWattPort
+  * Return: remaining hours
+  **/
+  calHoursOfCharging(person: any, selectedCar: any, availableCharge: number | undefined, selectedWattPort: any) {
+    let remaininghrs = (80 - (availableCharge ? availableCharge : 0)) / selectedWattPort;
     this.sendAlertToPerson(person, selectedCar, " charging is in progress. Remaining hours : " + Math.round(remaininghrs));
     return remaininghrs;
   }
 
+  /** Func: enableAllPorts
+  * Desc: Enable all Ports during business hours
+  * Params: None
+  * Return: None
+  **/
   enableAllPorts() {
     for (const station of this.chargingStationData) {
       station.isPort1Available = true;
@@ -395,22 +441,34 @@ export class ChargingManagementComponent implements OnInit {
     }
   }
 
-  showChargingStatus() { //Next phase
-    console.log("Car A is 65% charged.");
-  }
-
+  /** Func: getCarDetailsById
+  * Desc: Pass the car id and get the other details
+  * Params: car id
+  * Return: car details 
+  **/
   getCarDetailsById(carId: number) {
     return this.cars.find((p) => p.carId === carId);
   }
 
-  updateCarStatus(selectedCar: any, status: string) {
+  /** Func: updateCarStatus
+  * Desc: During start charging and stop charging actions, update car details
+  * Params: selectedCar, currentValue, status
+  * Return: None
+  **/
+  updateCarStatus(selectedCar: any, currentValue: number, status: string) {
     this.cars.map((data) => {
       if (data.carId === selectedCar) {
         data.chargingStatus = status;
+        data.availableCharge = currentValue;
       }
     })
   }
 
+  /** Func: stopCharging
+  * Desc: Stop charging and update car details
+  * Params: selectedCar
+  * Return: car details 
+  **/
   stopCharging(selectedCar: any) {
     this.chargeStopMessage = "";
     let carDetail = this.getCarDetailsById(selectedCar);
@@ -421,34 +479,31 @@ export class ChargingManagementComponent implements OnInit {
         this.sendAlertToPerson(data.port1PersonName, carDetail.carName, ' charging in Port 1 is stopped');
         data.port1CarName = '';
         data.port1PersonName = '';
+        data.port1RemainingHrs = 0;
       } else if (carDetail?.carName === data.port2CarName) {
         data.isPort2Available = true;
         data.port2Availablility = "Available";
         this.sendAlertToPerson(data.port2PersonName, carDetail.carName, ' charging in Port 2 is stopped');
         data.port2CarName = '';
         data.port2PersonName = '';
+        data.port2RemainingHrs = 0;
       }
     })
-    this.updateCarStatus(selectedCar, "Completed");
+    this.updateCarStatus(selectedCar, 80, "Completed");
     this.carsInQueue.push(this.getCarDetailsById(selectedCar));
     this.carsInUse = this.carsInUse.filter(car => car.carId != selectedCar);
     this.selectedCar = '';
   }
 
-  checkCarStatus() {
-    this.cars.map((data) => {
-      if (data.chargingStatus === 'In Progress' || data.chargingStatus === 'Completed') {
-        return true;
-      } else {
-        return false;
-      }
-    })
-    return false;
-  }
-
-  clearStationAndPort () {
-    this.selectedStation = "";
+  /** Func: clearStationAndPort
+  * Desc: Clear all selection like station, port, current battery value
+  * Params: none
+  * Return: none
+  **/
+  clearStationAndPort() {
+    this.selectedStation = '';
     this.selectedWattPort1 = '';
     this.selectedWattPort2 = '';
+    this.currentValue='';
   }
 }

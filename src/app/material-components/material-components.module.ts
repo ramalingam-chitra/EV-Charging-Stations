@@ -4,13 +4,16 @@ import {MatTableModule} from '@angular/material/table';
 import {MatSelectModule} from '@angular/material/select';
 import {MatDividerModule} from '@angular/material/divider';
 
+import { MatInputModule } from '@angular/material/input';
+
 @NgModule({
   declarations: [],
   imports: [
     MatTableModule,
     CommonModule,
     MatSelectModule,
-    MatDividerModule
+    MatDividerModule,
+    MatInputModule
   ],
   exports:[
     MatTableModule,
