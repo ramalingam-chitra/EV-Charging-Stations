@@ -344,13 +344,16 @@ export class ChargingManagementComponent implements OnInit {
       window.alert("Please select Car");
       return;
     }
-    if (selectedWattPort1 == undefined && selectedWattPort2 == undefined) {
-      window.alert("Please select a Port to start charging");
+    if (selectedStationId == 'undefined' || selectedStationId == '') {
+      window.alert("Please select Station");
       return;
     }
-    if (currentValue == undefined || currentValue == null) {
-      window.alert("Please provide current battery level in KW");
+    if ((selectedWattPort1 == undefined || selectedWattPort1 == '' )&& (selectedWattPort2 == undefined || selectedWattPort2 == '')) {
+      window.alert("Please select a Port");
       return;
+    }
+    if (currentValue == undefined || currentValue == '') {
+      currentValue = 0;
     }
     let car = this.getCarDetailsById(selectedCar);
     this.updateCarStatus(selectedCar, currentValue, "In Progress");

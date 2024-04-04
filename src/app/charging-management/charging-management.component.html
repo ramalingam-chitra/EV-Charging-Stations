@@ -10,7 +10,7 @@
       <div>
         <mat-form-field class="mt10">
           <mat-label>Select car to charge</mat-label>
-          <mat-select [(value)]="selectedCar" (selectionChange)="clearStationAndPort()"
+          <mat-select required [(value)]="selectedCar" (selectionChange)="clearStationAndPort()"
             [disabled]="disableAllStationAndPorts">
             <mat-option>None</mat-option>
             <mat-option *ngFor="let car of carsInQueue" [value]="car.carId">{{car.carName}}</mat-option>
@@ -20,7 +20,7 @@
       <div>
         <mat-form-field>
           <mat-label>Select station</mat-label>
-          <mat-select [(value)]="selectedStation" (selectionChange)="checkAvailablePorts(selectedStation)"
+          <mat-select required [(value)]="selectedStation" (selectionChange)="checkAvailablePorts(selectedStation)"
             [disabled]="disableAllStationAndPorts">
             <mat-option>None</mat-option>
             <mat-option value="1">Station 1</mat-option>
@@ -79,7 +79,7 @@
       <div>
         <mat-form-field class="mt10">
           <mat-label>Select car to stop charging</mat-label>
-          <mat-select [(value)]="selectedCarForStopCharge" [disabled]="disableAllStationAndPorts">
+          <mat-select required [(value)]="selectedCarForStopCharge" [disabled]="disableAllStationAndPorts">
             <mat-option>None</mat-option>
             <mat-option *ngFor="let car of carsInUse" [value]="car.carId">{{car.carName}}</mat-option>
           </mat-select>
