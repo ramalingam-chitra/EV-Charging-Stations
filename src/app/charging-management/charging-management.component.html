@@ -67,7 +67,7 @@
         <mat-error *ngIf="currentValue>=80">Battery is full</mat-error>
       </div>
       <div>
-        <button mat-flat-button color="primary" [disabled]="disableAllStationAndPorts || currentValue>=80"
+        <button id="startBtn" mat-flat-button color="primary" [disabled]="disableAllStationAndPorts || currentValue>=80"
           (click)="startCharging(selectedCar, selectedStation, selectedWattPort1,selectedWattPort2,currentValue)">Start
           Charging</button>
       </div>
@@ -86,7 +86,7 @@
         </mat-form-field>
         <span>{{chargeStopMessage}}</span>
         <div>
-          <button mat-flat-button color="warn" [disabled]="disableAllStationAndPorts"
+          <button id="stopBtn" mat-flat-button color="warn" [disabled]="disableAllStationAndPorts"
             (click)="stopCharging(selectedCarForStopCharge)">Stop Charging</button>
         </div>
       </div>

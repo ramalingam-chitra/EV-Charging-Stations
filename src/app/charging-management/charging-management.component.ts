@@ -20,12 +20,12 @@ export class ChargingManagementComponent implements OnInit {
   chargeStopMessage = '';
   showChargingStationData: boolean = false;
   currentValue: any;
+  today = new Date();
 
   constructor() { }
 
   ngAfterViewInit() {
-    let today = new Date();
-    if (today.getHours() <= 8 || today.getHours() >= 17) {
+    if (this.today.getHours() <= 8 || this.today.getHours() >= 17) {
       this.disableAllPorts();
       window.alert('Charging station is open only between 8AM and 5PM');
     }
@@ -264,7 +264,7 @@ export class ChargingManagementComponent implements OnInit {
   carsInUse: any[] = [];
   carsInQueue: any[] = this.cars;
 
-  disableAllStationAndPorts: boolean = true;
+  disableAllStationAndPorts: boolean = false;
 
   ngOnInit() {}
 
